@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}My Earnings - Seekers{% endblock %}
+
+{% block content %}
+
+<!-- Page Header -->
+<div class="page-header text-center">
+    <div class="container">
+        <h1 class="display-5 fw-bold mb-3">
+            <i class="bi bi-currency-rupee me-3"></i>My Earnings
+        </h1>
+        <p class="lead opacity-90">
+            Track your income from completed mock interviews
+        </p>
+    </div>
+</div>
+
+<!-- Earnings Card -->
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card text-center">
+            <div class="card-body p-5">
+                <div class="mb-4">
+                    <i class="bi bi-wallet2 text-success" style="font-size: 4rem;"></i>
+                </div>
+                <h2 class="text-muted mb-2">Total Earnings</h2>
+                <div class="display-3 fw-bold text-success mb-4">₹{{ total_earnings }}</div>
+                <div class="row text-center mb-4">
+                    <div class="col-6">
+                        <div class="h5 text-primary mb-1">{{ total_interviews }}</div>
+                        <small class="text-muted">Completed Interviews</small>
+                    </div>
+                    <div class="col-6">
+                        <div class="h5 text-warning mb-1">₹100</div>
+                        <small class="text-muted">Per Interview</small>
+                    </div>
+                </div>
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle me-2"></i>
+                    Complete more interviews to increase your earnings!
+                </div>
+                <a href="{% url 'my_interviews' %}" class="btn btn-primary">
+                    <i class="bi bi-arrow-left me-2"></i>Back to Interviews
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

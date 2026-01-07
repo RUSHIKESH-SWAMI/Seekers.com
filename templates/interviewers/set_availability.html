@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Set Availability</h1>
+{% for slot in slots %}
+    <p>{{ slot.date }} - {{ slot.time }} {% if slot.is_booked %}(Booked){% endif %}</p>
+{% endfor %}
+{% endblock %}

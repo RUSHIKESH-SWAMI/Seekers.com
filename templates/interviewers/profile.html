@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %}My Profile - Interviewer{% endblock %}
+
+{% block content %}
+
+<!-- Page Header -->
+<div class="page-header text-center">
+    <div class="container">
+        <h1 class="display-5 fw-bold mb-3">
+            <i class="bi bi-person-gear me-3"></i>My Interviewer Profile
+        </h1>
+        <p class="lead opacity-90">
+            Complete your profile to start conducting mock interviews and earning money
+        </p>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-body p-5">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    {% if form.errors %}
+                        <div class="alert alert-danger">
+                            {% for field, errors in form.errors.items %}
+                                {% for error in errors %}
+                                    <div><i class="bi bi-exclamation-circle me-2"></i>{{ error }}</div>
+                                {% endfor %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <div class="row">
+                        <div class="col-md-8 mb-4">
+                            <label for="{{ form.full_name.id_for_label }}" class="form-label fw-semibold">
+                                <i class="bi bi-person me-2"></i>{{ form.full_name.label }}
+                            </label>
+                            {{ form.full_name }}
+                            <div class="form-text">This will be displayed to students when they book interviews</div>
+                        </div>
+                        
+                        <div class="col-md-4 mb-4">
+                            <label for="{{ form.experience.id_for_label }}" class="form-label fw-semibold">
+                                <i class="bi bi-award me-2"></i>{{ form.experience.label }}
+                            </label>
+                            {{ form.experience }}
+                            <div class="form-text">Total years in the industry</div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="{{ form.expertise.id_for_label }}" class="form-label fw-semibold">
+                            <i class="bi bi-tools me-2"></i>{{ form.expertise.label }}
+                        </label>
+                        {{ form.expertise }}
+                        <div class="form-text">Technologies, frameworks, and domains you can interview for</div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="{{ form.bio.id_for_label }}" class="form-label fw-semibold">
+                            <i class="bi bi-file-person me-2"></i>{{ form.bio.label }}
+                        </label>
+                        {{ form.bio }}
+                        <div class="form-text">Share your background and what makes you a great interviewer</div>
+                    </div>
+
+                    <div class="d-flex gap-3 justify-content-end">
+                        <a href="{% url 'interviewer_dashboard' %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+                        </a>
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-check-circle me-2"></i>Save Profile
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Profile Tips -->
+        <div class="card mt-4">
+            <div class="card-header bg-light">
+                <h6 class="mb-0">
+                    <i class="bi bi-lightbulb me-2"></i>Profile Tips for Success
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Use your real name for credibility</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>List specific technologies you know</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Mention your current/past companies</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Highlight your interview experience</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Be approachable and encouraging</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Keep bio concise but informative</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Earnings Info -->
+        <div class="card mt-4 border-success">
+            <div class="card-body text-center">
+                <i class="bi bi-currency-rupee text-success" style="font-size: 2rem;"></i>
+                <h5 class="mt-2 mb-2">Earn ₹100 per Interview</h5>
+                <p class="text-muted mb-0">Complete your profile and start earning by helping students practice interviews</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

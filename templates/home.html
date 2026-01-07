@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+
+{% block title %}Seekers - Find Your Dream Job{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<div class="page-header text-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-4">
+                    Find Your <span class="text-warning">Dream Job</span>
+                </h1>
+                <p class="lead mb-4 opacity-90">
+                    Connect with top companies, practice with expert interviewers, and accelerate your career journey
+                </p>
+                <div class="d-flex gap-3 justify-content-center flex-wrap">
+                    <a href="{% url 'register' %}" class="btn btn-warning btn-lg px-4">
+                        <i class="bi bi-rocket-takeoff me-2"></i>Get Started
+                    </a>
+                    <a href="#features" class="btn btn-outline-light btn-lg px-4">
+                        <i class="bi bi-info-circle me-2"></i>Learn More
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<section id="features" class="py-5">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="fw-bold mb-3">Choose Your Path</h2>
+                <p class="text-muted">Whether you're seeking opportunities, hiring talent, or sharing expertise - we've got you covered</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <!-- Student Card -->
+            <div class="col-lg-4">
+                <div class="dashboard-card h-100">
+                    <div class="dashboard-icon bg-primary bg-opacity-10 text-primary">
+                        <i class="bi bi-mortarboard-fill"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">For Students</h4>
+                    <p class="text-muted mb-4">
+                        Discover job opportunities, upload your resume, and practice interviews with industry professionals
+                    </p>
+                    <ul class="list-unstyled text-start mb-4">
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Browse job listings</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Upload resume & portfolio</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Book mock interviews</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Track applications</li>
+                    </ul>
+                    <a href="{% url 'register' %}?role=student" class="btn btn-primary w-100">
+                        <i class="bi bi-person-plus me-2"></i>Join as Student
+                    </a>
+                </div>
+            </div>
+
+            <!-- Company Card -->
+            <div class="col-lg-4">
+                <div class="dashboard-card h-100">
+                    <div class="dashboard-icon bg-success bg-opacity-10 text-success">
+                        <i class="bi bi-building-fill"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">For Companies</h4>
+                    <p class="text-muted mb-4">
+                        Post job openings, review applications, and find the perfect candidates for your team
+                    </p>
+                    <ul class="list-unstyled text-start mb-4">
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Post job openings</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Review applications</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Access candidate resumes</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Manage hiring pipeline</li>
+                    </ul>
+                    <a href="{% url 'register' %}?role=company" class="btn btn-success w-100">
+                        <i class="bi bi-briefcase me-2"></i>Post Jobs
+                    </a>
+                </div>
+            </div>
+
+            <!-- Interviewer Card -->
+            <div class="col-lg-4">
+                <div class="dashboard-card h-100">
+                    <div class="dashboard-icon bg-warning bg-opacity-10 text-warning">
+                        <i class="bi bi-chat-dots-fill"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">For Interviewers</h4>
+                    <p class="text-muted mb-4">
+                        Share your expertise, conduct mock interviews, and earn money while helping students succeed
+                    </p>
+                    <ul class="list-unstyled text-start mb-4">
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Set your availability</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Conduct mock interviews</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Provide valuable feedback</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Earn ₹100 per session</li>
+                    </ul>
+                    <a href="{% url 'register' %}?role=interviewer" class="btn btn-warning w-100">
+                        <i class="bi bi-mic me-2"></i>Become Interviewer
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="py-5 bg-white">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-3 mb-4">
+                <div class="h2 fw-bold text-primary mb-2">500+</div>
+                <p class="text-muted mb-0">Active Students</p>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="h2 fw-bold text-success mb-2">50+</div>
+                <p class="text-muted mb-0">Partner Companies</p>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="h2 fw-bold text-warning mb-2">25+</div>
+                <p class="text-muted mb-0">Expert Interviewers</p>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="h2 fw-bold text-info mb-2">1000+</div>
+                <p class="text-muted mb-0">Successful Placements</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-6">
+                <h3 class="fw-bold mb-3">Ready to Get Started?</h3>
+                <p class="text-muted mb-4">
+                    Join thousands of students, companies, and professionals already using Seekers.com
+                </p>
+                <div class="d-flex gap-3 justify-content-center flex-wrap">
+                    <a href="{% url 'login' %}" class="btn btn-outline-primary">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>Already have an account?
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

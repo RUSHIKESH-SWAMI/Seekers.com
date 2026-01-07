@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+
+        <!-- Page Header -->
+        <div class="mb-4 text-center">
+            <h3 class="fw-bold">Company Dashboard</h3>
+            <p class="text-muted">
+                Manage job postings and view applicants
+            </p>
+        </div>
+
+        <!-- Dashboard Options -->
+        <div class="list-group shadow-sm">
+
+            <a href="/jobs/create/" class="list-group-item list-group-item-action">
+                Post Job
+            </a>
+
+            <a href="/jobs/my-jobs/" class="list-group-item list-group-item-action">
+                View My Jobs
+            </a>
+
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

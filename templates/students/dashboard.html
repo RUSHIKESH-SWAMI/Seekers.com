@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+
+{% block title %}Student Dashboard - Seekers{% endblock %}
+
+{% block content %}
+
+<!-- Page Header -->
+<div class="page-header text-center">
+    <div class="container">
+        <h1 class="display-5 fw-bold mb-3">
+            <i class="bi bi-speedometer2 me-3"></i>Student Dashboard
+        </h1>
+        <p class="lead opacity-90">
+            Manage your profile, applications, and career opportunities
+        </p>
+    </div>
+</div>
+
+<!-- Profile Status Alert -->
+<div class="row mb-4">
+    <div class="col-12">
+        {% if request.user.profile.resume %}
+            <div class="alert alert-success d-flex align-items-center" role="alert">
+                <i class="bi bi-check-circle-fill me-3 fs-4"></i>
+                <div class="flex-grow-1">
+                    <h6 class="alert-heading mb-1">Profile Complete!</h6>
+                    <p class="mb-0">Your resume is uploaded and ready for employers to view.</p>
+                </div>
+                <a href="{% url 'edit_profile' %}" class="btn btn-outline-success">
+                    <i class="bi bi-pencil me-1"></i>Update Profile
+                </a>
+            </div>
+        {% else %}
+            <div class="alert alert-warning d-flex align-items-center" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-3 fs-4"></i>
+                <div class="flex-grow-1">
+                    <h6 class="alert-heading mb-1">Complete Your Profile</h6>
+                    <p class="mb-0">Upload your resume to start applying for jobs and increase your visibility to employers.</p>
+                </div>
+                <a href="{% url 'edit_profile' %}" class="btn btn-warning">
+                    <i class="bi bi-upload me-1"></i>Upload Resume
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Dashboard Cards -->
+<div class="row g-4">
+    <!-- Available Jobs -->
+    <div class="col-lg-3 col-md-6">
+        <div class="dashboard-card h-100">
+            <div class="dashboard-icon bg-primary bg-opacity-10 text-primary">
+                <i class="bi bi-briefcase-fill"></i>
+            </div>
+            <h5 class="fw-bold mb-3">Available Jobs</h5>
+            <p class="text-muted mb-4">Browse and apply for jobs matching your skills and interests</p>
+            <a href="/jobs/list/" class="btn btn-primary w-100">
+                <i class="bi bi-search me-2"></i>Browse Jobs
+            </a>
+        </div>
+    </div>
+
+    <!-- My Applications -->
+    <div class="col-lg-3 col-md-6">
+        <div class="dashboard-card h-100">
+            <div class="dashboard-icon bg-info bg-opacity-10 text-info">
+                <i class="bi bi-file-earmark-text-fill"></i>
+            </div>
+            <h5 class="fw-bold mb-3">My Applications</h5>
+            <p class="text-muted mb-4">Track the status of all your job applications in one place</p>
+            <a href="/jobs/my-applications/" class="btn btn-info w-100">
+                <i class="bi bi-list-check me-2"></i>View Applications
+            </a>
+        </div>
+    </div>
+
+    <!-- Mock Interviews -->
+    <div class="col-lg-3 col-md-6">
+        <div class="dashboard-card h-100">
+            <div class="dashboard-icon bg-success bg-opacity-10 text-success">
+                <i class="bi bi-camera-video-fill"></i>
+            </div>
+            <h5 class="fw-bold mb-3">Mock Interviews</h5>
+            <p class="text-muted mb-4">Practice with industry professionals and improve your interview skills</p>
+            <a href="/interviews/available-slots/" class="btn btn-success w-100">
+                <i class="bi bi-calendar-plus me-2"></i>Book Interview
+            </a>
+        </div>
+    </div>
+
+    <!-- My Interviews -->
+    <div class="col-lg-3 col-md-6">
+        <div class="dashboard-card h-100">
+            <div class="dashboard-icon bg-warning bg-opacity-10 text-warning">
+                <i class="bi bi-chat-dots-fill"></i>
+            </div>
+            <h5 class="fw-bold mb-3">My Interviews</h5>
+            <p class="text-muted mb-4">View your booked interviews, feedback, and interview history</p>
+            <a href="{% url 'my_interviews' %}" class="btn btn-warning w-100">
+                <i class="bi bi-clock-history me-2"></i>View Interviews
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Stats 
+<div class="row mt-5">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title mb-4">
+                    <i class="bi bi-graph-up me-2"></i>Quick Stats
+                </h5>
+                <div class="row text-center">
+                    <div class="col-md-3 mb-3">
+                        <div class="h4 text-primary mb-1">0</div>
+                        <small class="text-muted">Applications Sent</small>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="h4 text-success mb-1">0</div>
+                        <small class="text-muted">Interviews Completed</small>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="h4 text-warning mb-1">0</div>
+                        <small class="text-muted">Pending Applications</small>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="h4 text-info mb-1">{{ user.profile.skills|default:'0' }}</div>
+                        <small class="text-muted">Skills Listed</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>   -->
+
+{% endblock %}

@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Job - Seekers{% endblock %}
+
+{% block content %}
+
+<!-- Page Header -->
+<div class="page-header text-center">
+    <div class="container">
+        <h1 class="display-5 fw-bold mb-3">
+            <i class="bi bi-plus-circle me-3"></i>Create Job Opening
+        </h1>
+        <p class="lead opacity-90">
+            Post a new job and find the perfect candidates for your team
+        </p>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-body p-5">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    {% if form.errors %}
+                        <div class="alert alert-danger">
+                            {% for field, errors in form.errors.items %}
+                                {% for error in errors %}
+                                    <div><i class="bi bi-exclamation-circle me-2"></i>{{ error }}</div>
+                                {% endfor %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <div class="row">
+                        <div class="col-md-8 mb-4">
+                            <label for="{{ form.title.id_for_label }}" class="form-label fw-semibold">
+                                <i class="bi bi-briefcase me-2"></i>{{ form.title.label }}
+                            </label>
+                            {{ form.title }}
+                            <div class="form-text">Make it clear and specific to attract the right candidates</div>
+                        </div>
+                        
+                        <div class="col-md-4 mb-4">
+                            <label for="{{ form.location.id_for_label }}" class="form-label fw-semibold">
+                                <i class="bi bi-geo-alt me-2"></i>{{ form.location.label }}
+                            </label>
+                            {{ form.location }}
+                            <div class="form-text">City, Remote, or Hybrid</div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="{{ form.skills_required.id_for_label }}" class="form-label fw-semibold">
+                            <i class="bi bi-tools me-2"></i>{{ form.skills_required.label }}
+                        </label>
+                        {{ form.skills_required }}
+                        <div class="form-text">Separate multiple skills with commas</div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="{{ form.description.id_for_label }}" class="form-label fw-semibold">
+                            <i class="bi bi-file-text me-2"></i>{{ form.description.label }}
+                        </label>
+                        {{ form.description }}
+                        <div class="form-text">Include responsibilities, requirements, and company culture</div>
+                    </div>
+
+                    <div class="d-flex gap-3 justify-content-end">
+                        <a href="/companies/dashboard/" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left me-2"></i>Cancel
+                        </a>
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="bi bi-plus-circle me-2"></i>Post Job
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Tips Card -->
+        <div class="card mt-4">
+            <div class="card-header bg-light">
+                <h6 class="mb-0">
+                    <i class="bi bi-lightbulb me-2"></i>Tips for Better Job Posts
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Use clear, specific job titles</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>List required skills accurately</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Include company culture info</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Mention growth opportunities</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Be specific about location</li>
+                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Keep descriptions concise</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

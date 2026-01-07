@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- Page Header -->
+<div class="mb-4">
+    <h3 class="fw-bold">My Job Applications</h3>
+    <p class="text-muted">Track the status of jobs you have applied for</p>
+</div>
+
+<!-- Applications Table -->
+<div class="card shadow-sm">
+    <div class="card-body p-0">
+
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Job Title</th>
+                    <th>Company</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            {% for app in applications %}
+                <tr>
+                    <td>{{ app.job.title }}</td>
+                    <td>{{ app.job.company.username }}</td>
+                    <td>
+                        {% if app.status == 'shortlisted' %}
+                            <span class="badge bg-success">Shortlisted</span>
+                        {% elif app.status == 'rejected' %}
+                            <span class="badge bg-danger">Rejected</span>
+                        {% else %}
+                            <span class="badge bg-warning text-dark">Pending</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="3" class="text-center py-4">
+                        <span class="text-muted">You haven’t applied for any jobs yet.</span>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+{% endblock %}

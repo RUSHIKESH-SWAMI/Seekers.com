@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>My Interviews</h1>
+<ul>
+{% for interview in interviews %}
+    <li>{{ interview.scheduled_at }} - {{ interview.student.username }} with {{ interview.interviewer.username }}</li>
+{% empty %}
+    <li>No interviews scheduled.</li>
+{% endfor %}
+</ul>
+{% endblock %}
