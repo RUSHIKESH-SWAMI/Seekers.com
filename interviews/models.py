@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+import uuid
 
 User = settings.AUTH_USER_MODEL
 
@@ -16,9 +17,24 @@ class InterviewBooking(models.Model):
     student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='student_interviews')
     interviewer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='interviewer_interviews')
     scheduled_at = models.DateTimeField()
-    status = models.CharField(max_length=20, choices=[('booked','Booked'),('completed','Completed'),('cancelled','Cancelled')], default='booked')
+    status = models.CharField(
+        max_length=20,
+        choices=[('booked','Booked'),('completed','Completed'),('cancelled','Cancelled')],
+        default='booked'
+    )
     feedback = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    meeting_link = models.URLField(blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        if not self.meeting_link:
+            self.meeting_link = self.generate_meeting_link()
+        super().save(*args, **kwargs)
+
+    def generate_meeting_link(self):
+        meeting_id = str(uuid.uuid4())[:8]
+        return f"https://meet.jit.si/seekers-interview-{meeting_id}"
 
     def __str__(self):
         return f"{self.student.username} → {self.interviewer.username}"

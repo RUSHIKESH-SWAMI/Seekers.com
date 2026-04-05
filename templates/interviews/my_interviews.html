@@ -42,6 +42,7 @@
                             <th class="px-4 py-3"><i class="bi bi-mic me-2"></i>Interviewer</th>
                             <th class="px-4 py-3"><i class="bi bi-calendar me-2"></i>Date & Time</th>
                             <th class="px-4 py-3"><i class="bi bi-flag me-2"></i>Status</th>
+                            <th class="px-4 py-3"><i class="bi bi-camera-video me-2"></i>Video Call</th>
                             <th class="px-4 py-3 text-center"><i class="bi bi-gear me-2"></i>Action</th>
                         </tr>
                     </thead>
@@ -83,6 +84,15 @@
                                         </span>
                                     {% else %}
                                         <span class="status-badge bg-secondary text-white">{{ i.status }}</span>
+                                    {% endif %}
+                                </td>
+                                <td class="px-4 py-3">
+                                    {% if i.meeting_link and i.status == 'booked' %}
+                                        <a href="{{ i.meeting_link }}" target="_blank" class="btn btn-success btn-sm">
+                                            <i class="bi bi-camera-video me-1"></i>Join Call
+                                        </a>
+                                    {% else %}
+                                        <span class="text-muted">-</span>
                                     {% endif %}
                                 </td>
                                 <td class="px-4 py-3 text-center">

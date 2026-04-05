@@ -73,12 +73,18 @@ def add_feedback(request, interview_id):
     return render(request, 'interviews/add_feedback.html', {'interview': interview})
 
 @login_required
-@role_required('interviewer')
 def delete_slot(request, slot_id):
     slot = get_object_or_404(InterviewerAvailability, id=slot_id, interviewer=request.user)
     if request.method == 'POST':
         slot.delete()
     return redirect('set_availability')
+
+@login_required
+def meeting_room(request, interview_id):
+    interview = get_object_or_404(InterviewBooking, id=interview_id)
+    if request.user != interview.student and request.user != interview.interviewer:
+        return redirect('my_interviews')
+    return render(request, 'interviews/meeting_room.html', {'interview': interview})
 
 
 
