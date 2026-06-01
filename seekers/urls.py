@@ -29,5 +29,6 @@ urlpatterns = [
     path('interviewers/', include('interviewers.urls')),
     path('jobs/', include('jobs.urls')),
     path('interviews/', include('interviews.urls')),
+    path('api/', include('api.urls')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

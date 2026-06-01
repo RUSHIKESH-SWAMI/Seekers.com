@@ -1,0 +1,16 @@
+.meeting-card {
+  overflow: hidden;
+}
+
+.meeting-iframe {
+  width: 100%;
+  height: min(70vh, 600px);
+  border: none;
+  display: block;
+}
+
+@media (max-width: 640px) {
+  .meeting-iframe {
+    height: 50vh;
+  }
+}

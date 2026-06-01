@@ -1,184 +1,300 @@
+# Seekers
 
-**Seekers.com** is a job portal platform that connects three types of users:
-- **Students**: Looking for jobs and interview practice
-- **Companies**: Posting jobs and hiring candidates
-- **Interviewers**: Conducting mock interviews and earning money
+**Seekers** is a full-stack hiring and interview platform that connects **students**, **companies**, and **interviewers** in one place. Students discover jobs and book mock interviews; companies post roles and manage applicants; interviewers offer practice sessions and track earnings.
 
-### Core Features:
-1. **Job Management**: Companies post jobs, students apply
-2. **Mock Interviews**: Students book practice sessions with interviewers
-3. **Profile Management**: Each user type has specific profile requirements
-4. **Application Tracking**: Students track job applications, companies manage candidates
+The project includes a **Django** backend (server-rendered templates + JSON API) and a modern **React** single-page application in `frontend/`.
 
+---
 
-##  Django Project Structure
+## Table of Contents
 
-Seekers/                          # Root project directory
-├── manage.py                     # Django's command-line utility
-├── db.sqlite3                    # SQLite database file
-├── seekers/                      # Main project configuration
-│   ├── __init__.py
-│   ├── settings.py               # Project settings (database, apps, etc.)
-│   ├── urls.py                   # Main URL routing
-│   ├── views.py                  # Project-level views
-│   ├── wsgi.py                   # Web server gateway interface
-│   └── asgi.py                   # Async server gateway interface
-├── accounts/                     # User authentication & profiles
-├── students/                     # Student-specific functionality
-├── companies/                    # Company-specific functionality
-├── interviewers/                 # Interviewer-specific functionality
-├── jobs/                         # Job posting & application system
-├── interviews/                   # Mock interview system
-├── adminpanel/                   # Admin functionality
-├── templates/                    # HTML templates
-├── static/                       # CSS, JS, images
-└── media/                        # User uploaded files (resumes, etc.)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Architecture](#architecture)
+- [Getting Started](#getting-started)
+- [Project Structure](#project-structure)
+- [User Roles](#user-roles)
+- [API Reference](#api-reference)
+- [Environment Variables](#environment-variables)
+- [Development](#development)
+- [Contributing](#contributing)
+
+---
+
+## Features
+
+| Area | Capabilities |
+|------|----------------|
+| **Authentication** | Role-based registration (student, company, interviewer), session login, protected routes |
+| **Jobs** | Companies create listings; students browse and apply; companies shortlist or reject applicants |
+| **Applications** | Students track status (`applied`, `shortlisted`, `rejected`) |
+| **Mock interviews** | Interviewers set availability; students book slots; Jitsi-powered meeting rooms |
+| **Profiles** | Student and interviewer profiles with skills, education, resume upload |
+| **Earnings** | Interviewers view completed sessions and earnings (₹100 per completed interview) |
+
+---
+
+## Tech Stack
+
+### Backend
+
+- **Python 3.10+**
+- **Django 5.2** — ORM, auth, admin, templates
+- **SQLite** — default database (development)
+- **Custom JSON API** (`api/`) — REST-style endpoints for the React app
+- **Session + CSRF** authentication with CORS support for local development
+
+### Frontend
+
+- **React 19** — functional components and hooks
+- **Vite 8** — dev server and build tooling
+- **React Router 7** — client-side navigation
+- **Axios** — HTTP client with credentials and CSRF headers
+- **Lucide React** — icons
+
+---
+
+## Architecture
+
+```
+┌─────────────────┐     HTTP + cookies/CSRF      ┌──────────────────────────┐
+│  React SPA      │ ───────────────────────────► │  Django (port 8000)      │
+│  localhost:5173 │                              │  • /api/*  → JSON API    │
+└─────────────────┘                              │  • /*      → Templates   │
+                                                 └────────────┬─────────────┘
+                                                              │
+                                                 ┌────────────▼─────────────┐
+                                                 │  SQLite + media/uploads  │
+                                                 └──────────────────────────┘
 ```
 
+- **Recommended UI:** Run the React app (`frontend/`) against the JSON API at `/api/`.
+- **Legacy UI:** Django templates under `templates/` remain available for the same workflows.
 
-##User Roles & Authentication
+---
 
-### 1. User Model (`accounts/models.py`)
-class User(AbstractUser):
-    ROLE_CHOICES = (
-        ('student', 'Student'),
-        ('company', 'Company'),
-        ('interviewer', 'Interviewer'),
-        ('admin', 'Admin'),
-    )
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
+## Getting Started
 
+### Prerequisites
 
-**Why Custom User Model?**
-- Django's default User model doesn't have role field
-- We need to distinguish between different user types
-- Easier to add role-specific functionality
+- Python 3.10 or newer
+- Node.js 18+ and npm
+- Git
 
-### 2. Profile Model (`accounts/models.py`)
+### 1. Clone and set up the backend
 
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
-    skills = models.TextField(blank=True)
-    resume = models.FileField(upload_to='resumes/', blank=True, null=True)
+```bash
+git clone <repository-url>
+cd Seekers
 
+python3 -m venv venv
+source venv/bin/activate          # Windows: venv\Scripts\activate
 
-**Why Separate Profile?**
-- Keeps User model clean
-- Can store role-specific data
-- OneToOne relationship ensures each user has exactly one profile
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver
+```
 
-### 3. Authentication Flow
+Backend runs at **http://127.0.0.1:8000/**
 
-#### Registration Process:
-1. User visits `/accounts/register/`
-2. Fills registration form with username, email, password, role
-3. `UserRegisterForm` validates data
-4. `register` view creates User and Profile
-5. User redirected to login page
+Optional — create a superuser for Django admin:
 
-#### Login Process:
-1. User visits `/accounts/login/`
-2. Enters username/password
-3. `custom_login` view authenticates user
-4. `role_redirect` function sends user to appropriate dashboard
-5. Session created, user stays logged in
+```bash
+python manage.py createsuperuser
+```
 
-#### Role-Based Access:
+Admin panel: **http://127.0.0.1:8000/admin/**
 
-@role_required('student')
-def student_dashboard(request):
-    # Only students can access this view
+### 2. Set up the frontend
 
+In a second terminal:
 
-##Database Models
+```bash
+cd frontend
+npm install
+cp .env.example .env
+npm run dev
+```
 
-### 1. User-Related Models
+Frontend runs at **http://localhost:5173**
 
-#### User (Built-in Django + Custom)
-- **Purpose**: Store login credentials and role
-- **Fields**: username, email, password, role
-- **Relationships**: OneToOne with Profile
+### Quick test flow
 
-#### Profile (accounts/models.py)
-- **Purpose**: Store additional user information
-- **Fields**: skills, resume file
-- **Why**: Separates auth data from profile data
+1. Open http://localhost:5173 and register as **Student**, **Company**, or **Interviewer**.
+2. Sign in and use the role-specific dashboard.
+3. As a company, post a job; as a student, apply; as an interviewer, add availability and complete a booked session.
 
-### 2. Student-Specific Models
+---
 
-#### StudentProfile (students/models.py)
-class StudentProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    full_name = models.CharField(max_length=100)
-    education = models.CharField(max_length=200)
-    skills = models.TextField()
-    resume = models.FileField(upload_to='resumes/')
-    
-- **Purpose**: Detailed student information
-- **Why Separate**: Students need more detailed profiles than other users
+## Project Structure
 
-### 3. Company-Specific Models
+```
+Seekers/
+├── manage.py                 # Django CLI entry point
+├── requirements.txt          # Python dependencies
+├── db.sqlite3                # SQLite database (after migrate)
+├── seekers/                  # Project settings & root URLs
+├── api/                      # JSON API for React (views, CORS middleware)
+├── accounts/                 # Custom User model, Profile, auth
+├── students/                 # Student profiles & dashboard
+├── companies/              # Company dashboard
+├── interviewers/           # Interviewer profiles & earnings views
+├── jobs/                   # Job postings & applications
+├── interviews/             # Availability, bookings, meetings
+├── templates/              # Django HTML templates (legacy UI)
+├── static/                 # Static assets
+├── media/                  # Uploaded resumes and files
+└── frontend/               # React SPA (Vite)
+    ├── src/
+    │   ├── api/            # Axios services
+    │   ├── components/     # UI & layout
+    │   ├── context/        # Auth state
+    │   ├── pages/          # Route pages by role
+    │   └── utils/          # Validation, formatting
+    ├── .env.example
+    └── package.json
+```
 
+---
 
-#### Job (jobs/models.py)
+## User Roles
 
-class Job(models.Model):
-    company = models.ForeignKey(User, on_delete=models.CASCADE)
-    title = models.CharField(max_length=200)
-    description = models.TextField()
-    skills_required = models.CharField(max_length=500)
-    location = models.CharField(max_length=100)
-    created_at = models.DateTimeField(auto_now_add=True)
-- **Purpose**: Store job postings
-- **ForeignKey**: Links job to company that posted it
+| Role | Description | Main actions |
+|------|-------------|--------------|
+| **Student** | Job seeker | Browse jobs, apply, manage profile, book mock interviews, join meetings |
+| **Company** | Employer | Post jobs, view applicants, shortlist or reject |
+| **Interviewer** | Mock interview expert | Set availability, conduct sessions, submit feedback, view earnings |
+| **Admin** | Platform admin | Django admin (`/admin/`) |
 
-#### JobApplication (jobs/models.py)
+Authentication uses Django sessions. The React app sends the CSRF token on mutating requests after calling `GET /api/csrf/`.
 
-class JobApplication(models.Model):
-    job = models.ForeignKey(Job, on_delete=models.CASCADE)
-    student = models.ForeignKey(User, on_delete=models.CASCADE)
-    status = models.CharField(max_length=20, default='pending')
-    applied_at = models.DateTimeField(auto_now_add=True)
-- **Purpose**: Track job applications
-- **Many-to-Many**: Students can apply to many jobs, jobs can have many applicants
+---
 
-### 4. Interviewer-Specific Models
+## API Reference
 
-#### InterviewerProfile (interviewers/models.py)
+Base URL: `http://127.0.0.1:8000/api/`
 
-class InterviewerProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    full_name = models.CharField(max_length=100)
-    experience = models.PositiveIntegerField()
-    expertise = models.CharField(max_length=200)
-    bio = models.TextField()
+All responses are JSON unless noted. Authenticated routes require a valid session cookie.
 
-#### InterviewerAvailability (interviews/models.py)
-class InterviewerAvailability(models.Model):
-    interviewer = models.ForeignKey(User, on_delete=models.CASCADE)
-    date = models.DateField()
-    time = models.TimeField()
-    is_booked = models.BooleanField(default=False)
-    
- **Purpose**: Store available time slots for interviews
+### Auth
 
-#### InterviewBooking (interviews/models.py)
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/csrf/` | Set CSRF cookie |
+| `POST` | `/auth/register/` | Create account |
+| `POST` | `/auth/login/` | Sign in |
+| `POST` | `/auth/logout/` | Sign out |
+| `GET` | `/auth/me/` | Current user |
 
-class InterviewBooking(models.Model):
-    student = models.ForeignKey(User, related_name='student_interviews')
-    interviewer = models.ForeignKey(User, related_name='interviewer_interviews')
-    scheduled_at = models.DateTimeField()
-    status = models.CharField(max_length=20, default='booked')
-    feedback = models.TextField(blank=True)
+### Jobs
 
- **Purpose**: Track booked interviews and feedback
+| Method | Endpoint | Role | Description |
+|--------|----------|------|-------------|
+| `GET` | `/jobs/` | Authenticated | List all jobs |
+| `POST` | `/jobs/create/` | Company | Create job |
+| `GET` | `/jobs/mine/` | Company | Company's jobs |
+| `POST` | `/jobs/<id>/apply/` | Student | Apply to job |
+| `GET` | `/jobs/<id>/applicants/` | Company | List applicants |
+| `GET` | `/applications/mine/` | Student | My applications |
+| `PATCH` | `/applications/<id>/status/` | Company | Update status |
 
+### Interviews
 
+| Method | Endpoint | Role | Description |
+|--------|----------|------|-------------|
+| `GET` / `POST` | `/interviews/slots/` | Interviewer | List / create availability |
+| `DELETE` | `/interviews/slots/<id>/` | Interviewer | Delete slot |
+| `GET` | `/interviews/slots/available/` | Student | Bookable slots |
+| `POST` | `/interviews/book/` | Student | Book slot |
+| `GET` | `/interviews/` | Authenticated | My interviews |
+| `GET` | `/interviews/<id>/` | Participant | Meeting details |
+| `POST` | `/interviews/<id>/feedback/` | Interviewer | Submit feedback |
 
+### Profiles
 
-How to Run :
+| Method | Endpoint | Role | Description |
+|--------|----------|------|-------------|
+| `GET` / `PATCH` | `/students/profile/` | Student | Profile (multipart for resume) |
+| `GET` / `PATCH` | `/interviewers/profile/` | Interviewer | Profile |
+| `GET` | `/interviewers/earnings/` | Interviewer | Earnings summary |
 
-Python3 manage.py runserver
+---
 
+## Environment Variables
 
+### Frontend (`frontend/.env`)
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `VITE_API_BASE_URL` | `http://127.0.0.1:8000/api` | API base URL |
+| `VITE_MEDIA_BASE_URL` | `http://127.0.0.1:8000` | Origin for resume/media links |
+
+Copy from the example file:
+
+```bash
+cp frontend/.env.example frontend/.env
+```
+
+### Backend
+
+CORS allowed origins for the Vite dev server are configured in `seekers/settings.py`:
+
+- `http://localhost:5173`
+- `http://127.0.0.1:5173`
+
+---
+
+## Development
+
+### Backend commands
+
+```bash
+source venv/bin/activate
+python manage.py runserver
+python manage.py makemigrations
+python manage.py migrate
+python manage.py shell
+```
+
+### Frontend commands
+
+```bash
+cd frontend
+npm run dev       # Development server
+npm run build     # Production build → frontend/dist/
+npm run preview   # Preview production build
+npm run lint      # ESLint
+```
+
+### Data models (summary)
+
+- **User** — `accounts.User` (extends `AbstractUser`) with `role`
+- **Profile** — `accounts.Profile` (skills, resume)
+- **StudentProfile** — `students.StudentProfile`
+- **Job** / **JobApplication** — `jobs` app
+- **InterviewerProfile** — `interviewers` app
+- **InterviewerAvailability** / **InterviewBooking** — `interviews` app (includes `meeting_link` for Jitsi)
+
+Application status values: `applied`, `shortlisted`, `rejected`.  
+Interview status values: `booked`, `completed`, `cancelled`.
+
+---
+
+## Contributing
+
+1. Fork the repository and create a feature branch.
+2. Follow existing code style (PEP 8 for Python, ESLint for React).
+3. Test backend migrations and frontend build before opening a pull request.
+4. Describe changes clearly in the PR summary.
+
+---
+
+## Acknowledgments
+
+Built with Django and React. Mock interview meetings use [Jitsi Meet](https://jitsi.org/) embeds.
+
+---
+
+<p align="center">
+  <sub>Seekers — Connect talent with opportunity.</sub>
+</p>
